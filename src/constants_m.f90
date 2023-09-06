@@ -1,0 +1,23 @@
+module constants_m
+use, intrinsic :: iso_fortran_env, only: int8, int16, int32, int64, real32, real64, real128, input_unit, output_unit, error_unit
+implicit none
+private
+
+    integer, parameter, public :: i8 = int8
+    integer, parameter, public :: i16 = int16
+    integer, parameter, public :: i32 = int32
+    integer, parameter, public :: i64 = int64
+
+    integer, parameter, public :: r32 = real32
+    integer, parameter, public :: r64 = real64
+    integer, parameter, public :: r128 = real128
+
+    integer, parameter, public :: stdin = input_unit
+    integer, parameter, public :: stdout = output_unit
+    integer, parameter, public :: stderr = error_unit
+
+    integer, parameter, public :: rk = r64
+
+    real(rk), parameter, public :: pi = acos(-1.0_rk)
+
+end module constants_m
