@@ -2,6 +2,7 @@ program test_random
 use, non_intrinsic :: constants_m, only: rk, stdout
 use, non_intrinsic :: random_m, only: randrng, normrnd
 use, non_intrinsic :: statistics_m, only: avg, std
+implicit none
 
     integer, parameter :: n = 2000000
     real(rk) :: x(n)
