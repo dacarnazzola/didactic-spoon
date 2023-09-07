@@ -4,7 +4,7 @@ use, non_intrinsic :: random_m, only: randrng, normrnd
 use, non_intrinsic :: statistics_m, only: avg, std
 implicit none
 
-    integer, parameter :: n = 2000000
+    integer, parameter :: n = 10000000
     real(rk) :: x(n)
 
     write(stdout,'(a)') 'beginning TEST_RANDOM...'

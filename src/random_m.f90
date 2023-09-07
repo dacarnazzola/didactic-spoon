@@ -11,8 +11,8 @@ private
 
         impure subroutine randrng(vals, n, v_min, v_max)
             real(rk), intent(out) :: vals(*)
-            integer, intent(in) :: n
-            real(rk), intent(in) :: v_min, v_max
+            integer, intent(in), value :: n
+            real(rk), intent(in), value :: v_min, v_max
             call random_number(vals(1:n))
             vals(1:n) = vals(1:n)*(v_max - v_min) + v_min
         end subroutine randrng
@@ -20,8 +20,8 @@ private
 
         impure subroutine normrnd(vals, n, mu, sig)
             real(rk), intent(out) :: vals(*)
-            integer, intent(in) :: n
-            real(rk), intent(in) :: mu, sig
+            integer, intent(in), value :: n
+            real(rk), intent(in), value :: mu, sig
             real(rk) :: u((n+1)/2), v((n+1)/2), r((n+1)/2)
             integer :: nu
             call random_number(u)
