@@ -18,6 +18,11 @@ private
 
     integer, parameter, public :: rk = r64
 
-    real(rk), parameter, public :: pi = acos(-1.0_rk)
+    !! constants given to 40 significant digits via https://www.wolframalpha.com/
+    real(rk), parameter, public ::         pi = 3.141592653589793238462643383279502884197_rk
+    real(rk), parameter, public ::    deg2rad = 0.01745329251994329576923690768488612713443_rk
+    real(rk), parameter, public ::    rad2deg = 57.29577951308232087679815481410517033241_rk
+    real(rk), parameter, public ::     nmi2ft = 6076.115485564304461942257217847769028871_rk
+    real(rk), parameter, public ::     ft2nmi = 0.0001645788336933045356371490280777537796976_rk
 
 end module constants_m
