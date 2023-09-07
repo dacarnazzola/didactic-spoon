@@ -12,3 +12,8 @@ cmake --build build
 ```
 
 presets are set up to use Ninja
+
+run tests with
+```
+./run_tests.sh
+```
