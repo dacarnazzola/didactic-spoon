@@ -27,6 +27,17 @@
         "CMAKE_Fortran_COMPILER": "gfortran",
         "CMAKE_Fortran_FLAGS": "-Ofast -march=native -flto -fwhole-program"
       }
+    },
+    {
+      "name": "intel",
+      "displayName": "intel DEBUG",
+      "description": "debug options for building with Intel ifort",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_Fortran_COMPILER": "ifort",
+        "CMAKE_Fortran_FLAGS": "-g -check all -traceback"
+      }
     }
   ]
 }
