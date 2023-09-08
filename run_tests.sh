@@ -9,4 +9,6 @@ cmake --build build
 
 ./bin/test_atmosphere
 
+./bin/test_cartesian_system
+
 ./bin/test_random

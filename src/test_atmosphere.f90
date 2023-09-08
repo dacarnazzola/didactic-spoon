@@ -7,7 +7,7 @@ use, non_intrinsic :: atmosphere_m, only: mach1
     write(stdout,'(a)') 'beginning TEST_ATMOSPHERE...'
 
     do i=0,60,5
-        write(stdout,'(a,i2,a,f7.2,a)') 'Mach 1 @ ',i,' kft: ',mach1(real(i*1000.0_rk, rk)),' ft/sec'
+        write(stdout,'(a,i2,a,f7.2,a)') 'Mach 1 @ ',i,' kft: ',mach1(h=real(i*1000.0_rk, rk)),' ft/sec'
     end do
 
     write(stdout,'(a)') 'completed TEST_ATMOSPHERE'
