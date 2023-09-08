@@ -1,6 +1,8 @@
 module cartesian_system_m
-use, non_intrinsic :: constants_m, only: rk, nmi2ft, deg2rad, twopi
+use, non_intrinsic :: constants_m, only: rk, nmi2ft, deg2rad, twopi, g0, rad2deg, ft2nmi, stdout
 use, non_intrinsic :: atmosphere_m, only: mach1
+use, non_intrinsic :: track_data_m, only: sensor_measurement
+use, non_intrinsic :: vector_math_m, only: vmag
 implicit none
 private
 
@@ -10,7 +12,7 @@ private
         real(rk) :: a(3) = 0.0_rk !! acceleration (ft/sec**2)
     end type cartesian_state
 
-    public :: cartesian_state, init_state
+    public :: cartesian_state, init_state, heading, cartesian_to_observation, print_state
 
     contains
 
@@ -29,6 +31,41 @@ private
             state%v(3) = 0.0_rk
             state%a = 0.0_rk
         end function init_state
+
+
+        pure real(rk) function heading(vec2)
+            real(rk), intent(in) :: vec2(2)
+            heading = atan2(vec2(1), vec2(2))
+            if (heading < 0.0_rk) heading = heading + twopi
+        end function heading
+
+
+        pure elemental function cartesian_to_observation(obs, tgt) result(meas)
+            type(cartesian_state), intent(in) :: obs, tgt
+            type(sensor_measurement) :: meas
+            real(rk) :: x_obs_tgt(3), v_obs_tgt(3)
+            !! range
+            x_obs_tgt = tgt%x - obs%x
+            meas%r = max(vmag(x_obs_tgt), 1.0_rk)
+            !! range-rate
+            v_obs_tgt = tgt%v - obs%v
+            meas%rdot = dot_product(v_obs_tgt, x_obs_tgt)/vmag(x_obs_tgt)
+            !! azimuth
+            meas%az = heading(x_obs_tgt(1:2))
+            !! elevation
+            meas%el = asin(x_obs_tgt(3)/meas%r)
+        end function cartesian_to_observation
+
+
+        impure elemental subroutine print_state(state)
+            type(cartesian_state), intent(in) :: state
+            write(stdout,'(a,3e14.6,a,2f7.1,f9.1)') 'Position [ft]: ',state%x,', [nmi, nmi, kft]: ',state%x(1:2)*ft2nmi, &
+                                                    state%x(3)/1000.0_rk
+            write(stdout,'(a,3e14.6,a,f5.2,a,f6.1)') 'Velocity [ft/sec]: ',state%v,', Speed [mach]: ', &
+                                                     vmag(state%v)/mach1(state%x(3)),', Heading [deg]: ', &
+                                                     heading(state%v(1:2))*rad2deg
+            write(stdout,'(a,3e14.6,a,f5.2)') 'Acceleration [ft/sec**2]: ',state%a,', G''s: ',vmag(state%a)/g0
+        end subroutine print_state
 
 
 end module cartesian_system_m

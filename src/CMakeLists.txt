@@ -5,6 +5,7 @@ set(MODULE_FILES
     constants_m.f90
     random_m.f90
     statistics_m.f90
+    track_data_m.f90
     vector_math_m.f90
    )
 

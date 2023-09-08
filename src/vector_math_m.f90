@@ -1,5 +1,5 @@
 module vector_math_m
-use, non_intrinsic :: constants_m, only: rk, twopi
+use, non_intrinsic :: constants_m, only: rk
 implicit none
 private
 
@@ -8,7 +8,7 @@ private
         module procedure vector_magnitude
     end interface vmag
 
-    public :: vmag, heading
+    public :: vmag
 
     contains
 
@@ -24,13 +24,6 @@ private
             integer, intent(in) :: n
             vector_magnitude = sqrt(sum(vec(1:n)**2))
         end function vector_magnitude
-
-
-        pure real(rk) function heading(vec2)
-            real(rk), intent(in) :: vec2(2)
-            heading = atan2(vec2(1), vec2(2))
-            if (heading < 0.0_rk) heading = heading + twopi
-        end function heading
 
 
 end module vector_math_m

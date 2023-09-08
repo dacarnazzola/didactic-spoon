@@ -28,6 +28,7 @@ private
 
 
         pure elemental real(rk) function mach1(h)
+        !! https://www.grc.nasa.gov/www/k-12/rocket/atmos.html
             real(rk), intent(in), value :: h !! altitude (ft)
             real(rk) :: T_f, & !! temperature (F)
                         T_r    !! temperature (R)
