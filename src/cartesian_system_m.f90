@@ -2,7 +2,7 @@ module cartesian_system_m
 use, non_intrinsic :: constants_m, only: rk, nmi2ft, deg2rad, twopi, g0, rad2deg, ft2nmi, stdout
 use, non_intrinsic :: atmosphere_m, only: mach1
 use, non_intrinsic :: track_data_m, only: sensor_measurement
-use, non_intrinsic :: vector_math_m, only: vmag
+use, non_intrinsic :: vector_math_m, only: vmag, vunit
 implicit none
 private
 
@@ -12,7 +12,7 @@ private
         real(rk) :: a(3) = 0.0_rk !! acceleration (ft/sec**2)
     end type cartesian_state
 
-    public :: cartesian_state, init_state, heading, cartesian_to_observation, print_state
+    public :: cartesian_state, init_state, heading, cartesian_to_observation, print_state, observation_to_cartesian
 
     contains
 
@@ -44,17 +44,35 @@ private
             type(cartesian_state), intent(in) :: obs, tgt
             type(sensor_measurement) :: meas
             real(rk) :: x_obs_tgt(3), v_obs_tgt(3)
-            !! range
             x_obs_tgt = tgt%x - obs%x
-            meas%r = max(vmag(x_obs_tgt), 1.0_rk)
-            !! range-rate
             v_obs_tgt = tgt%v - obs%v
-            meas%rdot = dot_product(v_obs_tgt, x_obs_tgt)/vmag(x_obs_tgt)
-            !! azimuth
-            meas%az = heading(x_obs_tgt(1:2))
-            !! elevation
-            meas%el = asin(x_obs_tgt(3)/meas%r)
+            meas%r = max(vmag(x_obs_tgt), 1.0_rk) !! range - relative to observer position
+            meas%rdot = dot_product(v_obs_tgt, x_obs_tgt)/vmag(x_obs_tgt) !! range-rate - relative velocity from observer perspective
+            meas%az = heading(x_obs_tgt(1:2)) !! azimuth - relative to observer position, global coordinates
+            meas%el = asin(x_obs_tgt(3)/meas%r) !! elevation - relative to observer altitude
         end function cartesian_to_observation
+
+
+        pure elemental function observation_to_cartesian(obs, meas) result(tgt)
+            type(cartesian_state), intent(in) :: obs
+            type(sensor_measurement), intent(in) :: meas
+            type(cartesian_state) :: tgt
+            real(rk) :: x_obs_tgt(3)
+            tgt%x = obs%x + az_el_to_vec(meas%az, meas%el)*meas%r
+            x_obs_tgt = tgt%x - obs%x
+            tgt%v = (dot_product(obs%v, x_obs_tgt)/vmag(x_obs_tgt) + meas%rdot)*vunit(x_obs_tgt)
+            tgt%a = 0.0_rk
+        end function observation_to_cartesian
+
+
+        pure function az_el_to_vec(az, el) result(vec)
+            real(rk), intent(in) :: az, el
+            real(rk) :: vec(3)
+            vec(1) = sin(az)
+            vec(2) = cos(az)
+            vec(3) = sin(el)
+            vec = vunit(vec)
+        end function az_el_to_vec
 
 
         impure elemental subroutine print_state(state)

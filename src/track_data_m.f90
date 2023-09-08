@@ -4,11 +4,11 @@ implicit none
 private
 
     type :: sensor_measurement
-        real(rk) :: r     !! range [ft], relative to observer position
-        real(rk) :: rdot  !! d(range)/d(t) [ft/sec], relative to observer velocity
-        real(rk) :: az    !! azimuth [rad], global coordinates TODO: relative to observer velocity
+        real(rk) :: r     !! range [ft]
+        real(rk) :: rdot  !! d(range)/d(t) [ft/sec]
+        real(rk) :: az    !! azimuth [rad]
 !!TODO:        real(rk) :: azdot !! d(azimuth)/d(t) [rad/sec]
-        real(rk) :: el    !! elevation [rad], relative to observer altitude
+        real(rk) :: el    !! elevation [rad]
 !!TODO:        real(rk) :: eldot !! d(elevation)/d(t) [rad/sec]
     end type sensor_measurement
 
